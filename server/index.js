@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 
 import authRoutes from "./routes/authRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import errorMiddleware from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -22,7 +23,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 // routes middleware
-app.use("/api", authRoutes);
+app.use("/api/users", authRoutes);
+app.use("/api/category", categoryRoutes);
 
 // Обработчик ошибок обязательно должен быть последним в цепочке
 app.use(errorMiddleware);

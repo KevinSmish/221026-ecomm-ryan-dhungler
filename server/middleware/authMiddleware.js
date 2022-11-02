@@ -29,13 +29,19 @@ export const requireSignin = (req, res, next) => {
 
 export const isAdmin = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id);
-    if (user.role !== 1) {
-      return res.status(401).send("Unauthorized");
-    } else {
-      next();
+    const user_id = req.user._id;
+    if (!user_id) {
+      return next(ApiError.UnauthorizedError());
     }
+
+    const user = await User.findById(user_id);
+    if (user.role !== 1) {
+      return next(ApiError.BadRequest("Access denied"));
+    }
+
+    next();
   } catch (err) {
     console.log(err);
+    return next(ApiError.UnauthorizedError());
   }
 };
