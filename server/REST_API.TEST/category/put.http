@@ -1,0 +1,10 @@
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzVkMzYwNzZjNDViOTZiYmZiM2MxYzQiLCJpYXQiOjE2NjczMjM0NzcsImV4cCI6MTY2NzkyODI3N30.fvT840HPOLsOxdy4edG5nkzuQD4KQqxnKY3lariOgoI
+PUT http://localhost:8000/api/category/6362ab7ab652ec1c43476c392
+User-Agent: rest-client
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "name": "JavaScript"
+}

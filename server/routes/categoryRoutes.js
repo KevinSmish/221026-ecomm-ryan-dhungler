@@ -1,11 +1,17 @@
 import express from "express";
 import { body } from "express-validator";
 import { requireSignin, isAdmin } from "../middleware/authMiddleware.js";
-import { create } from "../controllers/categoryController.js";
+import {
+  create,
+  read,
+  update,
+  remove,
+  list,
+  productsByCategory,
+} from "../controllers/categoryController.js";
 
 const router = express.Router();
 
-// public routes
 router.post(
   "",
   body("name").isString().isLength({ min: 3, max: 32 }),
@@ -13,5 +19,19 @@ router.post(
   isAdmin,
   create
 );
+
+router.get("/list", list);
+router.get("/:slug", read);
+router.get("/products-by-category/:slug", productsByCategory);
+
+router.put(
+  "/:categoryId",
+  body("name").isString().isLength({ min: 3, max: 32 }),
+  requireSignin,
+  isAdmin,
+  update
+);
+
+router.delete("/:categoryId", requireSignin, isAdmin, remove);
 
 export default router;
