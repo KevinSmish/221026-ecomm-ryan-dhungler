@@ -1,7 +1,6 @@
 import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 
-import ApiError from "../exceptions/apiError.js";
 import User from "../models/user.js";
 import { hashPassword, comparePassword } from "../helpers/authHelper.js";
 
@@ -12,9 +11,11 @@ export const users = async (req, res, next) => {
 export const register = async (req, res, next) => {
   try {
     // 1. all fields required validation
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Ошибка при валидации", errors.array()));
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      const error = "Ошибка при валидации";
+      const errors = validationErrors.array();
+      return res.json({ error, errors });
     }
 
     // 2. destructure name, email, password from req.body
@@ -23,7 +24,8 @@ export const register = async (req, res, next) => {
     // 3. check if email is taken
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return next(ApiError.BadRequest(`Email ${email} is already taken`));
+      const error = `Email ${email} is already taken`;
+      return res.json({ error });
     }
 
     // 4 hash password
@@ -59,7 +61,9 @@ export const login = async (req, res, next) => {
     // 1. all fields required validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest("Ошибка при валидации", errors.array()));
+      const error = "Ошибка при валидации";
+      const errors = validationErrors.array();
+      return res.json({ error, errors });
     }
 
     // 2. destructure email, password from req.body
@@ -67,12 +71,14 @@ export const login = async (req, res, next) => {
     // 3. check if email is not exists
     const user = await User.findOne({ email });
     if (!user) {
-      return next(ApiError.BadRequest(`User ${email} is not found`));
+      const error = `User ${email} is not found`;
+      return res.json({ error });
     }
     // 4. compare password
     const match = await comparePassword(password, user.password);
     if (!match) {
-      return next(ApiError.BadRequest("Wrong password!"));
+      const error = "Wrong password!";
+      return res.json({ error });
     }
     // 5. create signed jwt
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
