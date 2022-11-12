@@ -1,0 +1,37 @@
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzVkMzYwNzZjNDViOTZiYmZiM2MxYzQiLCJpYXQiOjE2NjgwMDg3MzksImV4cCI6MTY2ODYxMzUzOX0.HOPY1_GEaD6w1p7XOfmURVOnkAwyskDwmmM2xdl1h9k
+PUT  http://localhost:8000/api/products/636d3f695e618aeabd61f34a
+User-Agent: rest-client
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
+Content-Type: multipart/form-data; boundary=----MyBoundary
+Authorization: {{token}}
+
+------MyBoundary
+Content-Disposition: form-data; name="photo"; filename="03mvmA64MGY.jpg"
+Content-Type: image/jpeg
+
+qqq
+------MyBoundary
+Content-Disposition: form-data; name="name"
+
+Learn JavaScript
+------MyBoundary
+Content-Disposition: form-data; name="description"
+
+This is a book for all beginers to JS
+------MyBoundary
+Content-Disposition: form-data; name="price"
+
+1.23
+------MyBoundary
+Content-Disposition: form-data; name="category"
+
+6363e414ca6e4624c7377339
+------MyBoundary
+Content-Disposition: form-data; name="quantity"
+
+7
+------MyBoundary
+Content-Disposition: form-data; name="shipping"
+
+false
+------MyBoundary

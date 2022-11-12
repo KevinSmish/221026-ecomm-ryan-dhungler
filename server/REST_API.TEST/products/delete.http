@@ -1,0 +1,6 @@
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzVkMzYwNzZjNDViOTZiYmZiM2MxYzQiLCJpYXQiOjE2NjgwMDg3MzksImV4cCI6MTY2ODYxMzUzOX0.HOPY1_GEaD6w1p7XOfmURVOnkAwyskDwmmM2xdl1h9k
+DELETE http://localhost:8000/api/products/636bcb2e7fba8b0fbf706472
+User-Agent: rest-client
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
+Content-Type: application/json
+Authorization: {{token}}

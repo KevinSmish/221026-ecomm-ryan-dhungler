@@ -1,11 +1,19 @@
+// @ts-nocheck
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import Jumbotron from "components/cards/Jumbotron";
 import axios from "../../axios";
+import { useAuth } from "context/auth";
 
 const Login = () => {
+  const [auth, setAuth] = useAuth();
+
   const [email, setEmail] = useState("null@mail.ru");
   const [password, setPassword] = useState("123");
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     try {
@@ -16,16 +24,20 @@ const Login = () => {
         password,
       });
 
-      if (data.error) {
+      if (data?.error) {
         toast.error(data.error);
       } else {
         localStorage.setItem("auth", JSON.stringify(data));
-        //        setAuth({ ...auth, token: data.token, user: data.user });
+        setAuth({ ...auth, token: data.token, user: data.user });
         toast.success(`Login ${email} successful`);
-        //        navigate("/dashboard/user");
+        navigate(
+          location.state ||
+            `/dashboard/${data?.user?.role === 1 ? "admin" : "user"}`
+        );
       }
     } catch (err) {
       console.log(err);
+      toast.error("Login failed. Try again.");
     }
   };
 

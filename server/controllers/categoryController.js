@@ -105,7 +105,9 @@ export const productsByCategory = async (req, res) => {
   try {
     const slug = req.params.slug;
     const category = await Category.findOne({ slug });
-    const products = await Product.find({ category }).populate("category");
+    const products = await Product.find({ category })
+      .select("-photo")
+      .populate("category");
 
     res.json({
       category,

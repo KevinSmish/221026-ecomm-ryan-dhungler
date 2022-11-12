@@ -22,5 +22,9 @@ router.post(
 
 // protected routes
 router.get("", requireSignin, isAdmin, users);
+router.get("/auth-check", requireSignin, (req, res) => res.json({ ok: true }));
+router.get("/admin-check", requireSignin, isAdmin, (req, res) =>
+  res.json({ ok: true })
+);
 
 export default router;

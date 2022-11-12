@@ -1,47 +1,39 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-import ApiError from "../exceptions/apiError.js";
+import {
+  setErrorMessage,
+  unauthorizedError,
+} from "../helpers/responseHelper.js";
 
 export const requireSignin = (req, res, next) => {
   try {
     const authorizationHeader = req.headers.authorization;
-    if (!authorizationHeader) {
-      return next(ApiError.UnauthorizedError());
-    }
+    if (!authorizationHeader) return unauthorizedError(res);
 
     // Get token from header
     const accessToken = authorizationHeader.split(" ")[1];
-    if (!accessToken) {
-      return next(ApiError.UnauthorizedError());
-    }
+    if (!accessToken) return unauthorizedError(res);
 
     const decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
-    if (!decoded) {
-      return next(ApiError.UnauthorizedError());
-    }
+    if (!decoded) return unauthorizedError(res);
 
     req.user = decoded;
     next();
   } catch (err) {
-    return next(ApiError.UnauthorizedError());
+    return unauthorizedError(res);
   }
 };
 
 export const isAdmin = async (req, res, next) => {
   try {
     const user_id = req.user._id;
-    if (!user_id) {
-      return next(ApiError.UnauthorizedError());
-    }
+    if (!user_id) return unauthorizedError(res);
 
     const user = await User.findById(user_id);
-    if (user.role !== 1) {
-      return next(ApiError.BadRequest("Access denied"));
-    }
-
+    if (user.role !== 1) return setErrorMessage(res, "Access denied");
     next();
   } catch (err) {
     console.log(err);
-    return next(ApiError.UnauthorizedError());
+    return unauthorizedError(res);
   }
 };

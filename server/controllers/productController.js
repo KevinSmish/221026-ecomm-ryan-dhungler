@@ -7,10 +7,9 @@ import Product from "../models/product.js";
 // import Order from "../models/order.js";
 
 dotenv.config();
+const setError = (res, error) => res.json({ error });
 
 export const create = async (req, res) => {
-  const setError = (res, error) => res.json({ error });
-
   try {
     // console.log("req.body:", req.body);
     // console.log("req.fields:", req.fields);
@@ -82,6 +81,77 @@ export const read = async (req, res) => {
   }
 };
 
+export const photo = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const product = await Product.findById(productId).select("photo");
+    if (product.photo.data) {
+      res.set("Content-Type", product.photo.contentType);
+      return res.send(product.photo.data);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const remove = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const product = await Product.findByIdAndDelete(productId).select("-photo");
+    res.json(product);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    // 1. all fields required validation
+    if (!req.fields.name?.trim()) return setError(res, "Name is required");
+
+    if (!req.fields.description?.trim())
+      return setError(res, "Description is required");
+
+    if (!req.fields.price?.trim()) return setError(res, "Price is required");
+
+    if (!req.fields.category?.trim())
+      return setError(res, "Category is required");
+
+    if (!req.fields.quantity?.trim())
+      return setError(res, "Quantity is required");
+
+    if (!req.fields.shipping?.trim())
+      return setError(res, "Shipping is required");
+
+    if (req.files.photo && req.files.photo.size > 1000000)
+      return setError(res, "Image should be less than 1mb in size");
+
+    // console.log(req.fields);
+    // console.log(req.files);
+    const { name } = req.fields;
+    const { photo } = req.files;
+
+    // update product
+    const productId = req.params.productId;
+    const product = await Product.findByIdAndUpdate(
+      productId,
+      { ...req.fields, slug: slugify(name) },
+      { new: true }
+    );
+
+    if (photo) {
+      product.photo.data = fs.readFileSync(photo.path);
+      product.photo.contentType = photo.type;
+    }
+
+    const savedProduct = await product.save();
+    return res.json(savedProduct);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json(err.message);
+  }
+};
+
 /*
 import braintree from "braintree";
 import sgMail from "@sendgrid/mail";
@@ -95,80 +165,6 @@ const gateway = new braintree.BraintreeGateway({
   publicKey: process.env.BRAINTREE_PUBLIC_KEY,
   privateKey: process.env.BRAINTREE_PRIVATE_KEY,
 });
-
-export const photo = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.productId).select(
-      "photo"
-    );
-    if (product.photo.data) {
-      res.set("Content-Type", product.photo.contentType);
-      return res.send(product.photo.data);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const remove = async (req, res) => {
-  try {
-    const product = await Product.findByIdAndDelete(
-      req.params.productId
-    ).select("-photo");
-    res.json(product);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const update = async (req, res) => {
-  try {
-    // console.log(req.fields);
-    // console.log(req.files);
-    const { name, description, price, category, quantity, shipping } =
-      req.fields;
-    const { photo } = req.files;
-
-    // validation
-    switch (true) {
-      case !name.trim():
-        res.json({ error: "Name is required" });
-      case !description.trim():
-        res.json({ error: "Description is required" });
-      case !price.trim():
-        res.json({ error: "Price is required" });
-      case !category.trim():
-        res.json({ error: "Category is required" });
-      case !quantity.trim():
-        res.json({ error: "Quantity is required" });
-      case !shipping.trim():
-        res.json({ error: "Shipping is required" });
-      case photo && photo.size > 1000000:
-        res.json({ error: "Image should be less than 1mb in size" });
-    }
-
-    // update product
-    const product = await Product.findByIdAndUpdate(
-      req.params.productId,
-      {
-        ...req.fields,
-        slug: slugify(name),
-      },
-      { new: true }
-    );
-
-    if (photo) {
-      product.photo.data = fs.readFileSync(photo.path);
-      product.photo.contentType = photo.type;
-    }
-
-    await product.save();
-    res.json(product);
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json(err.message);
-  }
-};
 
 export const filteredProducts = async (req, res) => {
   try {

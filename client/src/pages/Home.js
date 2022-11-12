@@ -1,8 +1,12 @@
 // @ts-nocheck
+import Jumbotron from "components/cards/Jumbotron";
 import React, { useState } from "react";
 import axios from "../axios";
+import { useAuth } from "../context/auth";
 
 const Home = () => {
+  const [auth, setAuth] = useAuth();
+
   const [photo, setPhoto] = useState("photo-1");
   const [name, setName] = useState("Vlad");
   const [description, setDescription] = useState("desc");
@@ -19,7 +23,9 @@ const Home = () => {
 
   return (
     <div>
-      Home
+      <Jumbotron title="Home" />
+      <pre>{JSON.stringify(auth, null, 4)}</pre>
+
       <div className="pt-2">
         <label className="btn btn-outline-secondary col-12 mb-3">
           {photo ? photo.name : "Upload photo"}

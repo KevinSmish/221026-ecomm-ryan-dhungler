@@ -1,0 +1,6 @@
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzVkMzYwNzZjNDViOTZiYmZiM2MxYzQiLCJpYXQiOjE2NjgyNzY0NDIsImV4cCI6MTY2ODg4MTI0Mn0.hVIE623L_htxb-Zhsa-ZyHfgwQtCvDUJQDq0c7P4VpQ
+GET http://localhost:8000/api/users/admin-check
+User-Agent: rest-client
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
+Content-Type: application/json
+Authorization: {{token}}

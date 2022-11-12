@@ -1,12 +1,19 @@
+// @ts-nocheck
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Jumbotron from "components/cards/Jumbotron";
 import axios from "../../axios";
+import { useAuth } from "context/auth";
 
 const Register = () => {
+  const [auth, setAuth] = useAuth();
+
   const [name, setName] = useState("Kevin");
   const [email, setEmail] = useState("null@mail.ru");
   const [password, setPassword] = useState("123");
+
+  const navigate = useNavigate();
 
   const save = async (e) => {
     try {
@@ -20,12 +27,13 @@ const Register = () => {
         toast.error(data.error);
       } else {
         localStorage.setItem("auth", JSON.stringify(data));
-        //        setAuth({ ...auth, token: data.token, user: data.user });
+        setAuth({ ...auth, token: data.token, user: data.user });
         toast.success(`Registration ${email} successful`);
-        //        navigate("/dashboard/user");
+        navigate("/dashboard/user");
       }
     } catch (err) {
       console.log(err);
+      toast.error("Registration failed. Try again.");
     }
   };
 
