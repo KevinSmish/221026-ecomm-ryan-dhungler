@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React from "react";
-import Jumbotron from "components/cards/Jumbotron";
 import { useAuth } from "context/auth";
-import UserMenu from "components/nav/UserMenu";
+import Jumbotron from "components/cards/Jumbotron";
+import UserMenu from "../../components/nav/UserMenu";
 
-const Dashboard = () => {
+const Orders = () => {
   const [auth, setAuth] = useAuth();
 
   return (
@@ -19,11 +19,8 @@ const Dashboard = () => {
             <UserMenu />
           </div>
           <div className="col-md-9">
-            <div className="p-3 mt-3 mb-2 h4 bg-light">User Information</div>
-            <ul className="list-group">
-              <li className="list-group-item">{auth?.user?.name}</li>
-              <li className="list-group-item">{auth?.user?.email}</li>
-            </ul>
+            <div className="p-3 mt-3 mb-2 h4 bg-light">Orders</div>
+            <p>Orders...</p>
           </div>
         </div>
       </div>
@@ -31,4 +28,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Orders;

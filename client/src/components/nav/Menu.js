@@ -1,4 +1,5 @@
 // @ts-nocheck
+import Search from "components/forms/Search";
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
@@ -22,6 +23,20 @@ const Menu = () => {
             HOME
           </NavLink>
         </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" end to="/shop">
+            SHOP
+          </NavLink>
+        </li>
+
+        {/* <li className="nav-item">
+          <NavLink className="nav-link" end to="/dashboard/secret">
+            SECRET
+          </NavLink>
+        </li> */}
+
+        <Search />
+
         {auth?.user === null ? (
           <>
             <li className="nav-item">
@@ -36,11 +51,34 @@ const Menu = () => {
             </li>
           </>
         ) : (
-          <li className="nav-item pointer">
-            <a href="/" onClick={logout} className="nav-link">
-              Logout
-            </a>
-          </li>
+          <div className="dropdown">
+            <li>
+              <a
+                className="nav-link pointer dropdown-toggle"
+                data-bs-toggle="dropdown"
+                href="@"
+              >
+                {auth?.user?.name}
+              </a>
+              <ul className="dropdown-menu">
+                <li>
+                  <NavLink
+                    className="nav-link"
+                    to={`/dashboard/${
+                      auth?.user?.role === 1 ? "admin" : "user"
+                    }`}
+                  >
+                    Dashboard
+                  </NavLink>
+                </li>
+                <li className="nav-item pointer">
+                  <a href="/" onClick={logout} className="nav-link">
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </div>
         )}
       </ul>
     </>

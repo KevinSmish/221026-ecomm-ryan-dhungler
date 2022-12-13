@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import axios from "../axios";
+import axios from "axios";
 
 const AuthContext = createContext("");
 
@@ -13,6 +13,8 @@ const AuthProvider = ({ children }) => {
     token: "",
   });
 
+  // axios config
+  axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
   axios.defaults.headers.common["Authorization"] = "Bearer " + auth?.token;
 
   useEffect(() => {

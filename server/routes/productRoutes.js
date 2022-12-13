@@ -13,24 +13,28 @@ import {
   list,
   read,
   photo,
-  remove, update,
-} from "../controllers/productController.js";
-
-router.post("", requireSignin, isAdmin, formidable(), create);
-router.get("", list);
-router.get("/photo/:productId", photo);
-router.get("/:slug", read);
-router.delete("/:productId", requireSignin, isAdmin, remove);
-router.put("/:productId", requireSignin, isAdmin, formidable(), update);
-
-/*
-// controllers
-import {
+  remove,
   update,
   filteredProducts,
   productsCount,
   listProducts,
   productsSearch,
+} from "../controllers/productController.js";
+
+router.post("", requireSignin, isAdmin, formidable(), create);
+router.get("", list);
+router.get("/count", productsCount);
+router.get("/page/:page", listProducts);
+router.get("/photo/:productId", photo);
+router.get("/search/:keyword", productsSearch);
+router.get("/:slug", read);
+router.delete("/:productId", requireSignin, isAdmin, remove);
+router.put("/:productId", requireSignin, isAdmin, formidable(), update);
+router.post("/filtered", filteredProducts);
+
+/*
+// controllers
+import {
   relatedProducts,
   getToken,
   processPayment,
@@ -39,12 +43,6 @@ import {
 
 
 
-
-
-router.post("/filtered-products", filteredProducts);
-router.get("/products-count", productsCount);
-router.get("/list-products/:page", listProducts);
-router.get("/products/search/:keyword", productsSearch);
 router.get("/related-products/:productId/:categoryId", relatedProducts);
 
 router.get("/braintree/token", getToken);

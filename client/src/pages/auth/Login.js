@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import Jumbotron from "components/cards/Jumbotron";
-import axios from "../../axios";
+import axios from "axios";
 import { useAuth } from "context/auth";
 
 const Login = () => {

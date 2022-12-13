@@ -152,31 +152,19 @@ export const update = async (req, res) => {
   }
 };
 
-/*
-import braintree from "braintree";
-import sgMail from "@sendgrid/mail";
-
-
-sgMail.setApiKey(process.env.SENDGRID_KEY);
-
-const gateway = new braintree.BraintreeGateway({
-  environment: braintree.Environment.Sandbox,
-  merchantId: process.env.BRAINTREE_MERCHANT_ID,
-  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-});
-
 export const filteredProducts = async (req, res) => {
   try {
-    const { checked, radio } = req.body;
+    const { categories, prices } = req.body;
 
     let args = {};
-    if (checked.length > 0) args.category = checked;
-    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
-    console.log("args => ", args);
+    if (categories.length > 0) args.category = categories;
+    if (prices.length) args.price = { $gte: prices[0], $lte: prices[1] };
+    // console.log("args => ", args);
 
-    const products = await Product.find(args);
-    console.log("filtered products query => ", products.length);
+    const products = await Product.find(args).select("-photo");
+    // console.log("filtered products query => ", products.length);
+    console.log(products);
+
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -194,7 +182,7 @@ export const productsCount = async (req, res) => {
 
 export const listProducts = async (req, res) => {
   try {
-    const perPage = 6;
+    const perPage = 3; // 6
     const page = req.params.page ? req.params.page : 1;
 
     const products = await Product.find({})
@@ -224,6 +212,19 @@ export const productsSearch = async (req, res) => {
     console.log(err);
   }
 };
+
+/*
+import braintree from "braintree";
+import sgMail from "@sendgrid/mail";
+
+sgMail.setApiKey(process.env.SENDGRID_KEY);
+
+const gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.BRAINTREE_MERCHANT_ID,
+  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 export const relatedProducts = async (req, res) => {
   try {

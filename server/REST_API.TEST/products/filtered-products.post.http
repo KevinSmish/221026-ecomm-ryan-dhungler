@@ -1,0 +1,9 @@
+POST http://localhost:8000/api/products/filtered
+User-Agent: rest-client
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,zh-CN;q=0.4
+Content-Type: application/json
+
+{
+    "categories": ["637fb9423dea50692b7d08a6"],
+    "prices": [0,19]
+}
