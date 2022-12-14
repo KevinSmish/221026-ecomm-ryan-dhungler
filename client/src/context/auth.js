@@ -4,12 +4,10 @@ import axios from "axios";
 const AuthContext = createContext("");
 
 const AuthProvider = ({ children }) => {
+  const defaultUser = { name: "Kevin", email: "null@mail.ru", password: "123" };
+
   const [auth, setAuth] = useState({
-    user: {
-      name: "Kevin",
-      email: "null@mail.ru",
-      password: "123",
-    },
+    user: defaultUser,
     token: "",
   });
 

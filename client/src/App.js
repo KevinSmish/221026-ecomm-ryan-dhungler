@@ -26,6 +26,7 @@ function App() {
   const Cart = React.lazy(() => import("./pages/user/Cart.js"));
   const Orders = React.lazy(() => import("./pages/user/Orders.js"));
   const Shop = React.lazy(() => import("./pages/Shop.js"));
+  const Search = React.lazy(() => import("./pages/Search.js"));
 
   return (
     <Suspense fallback={<div>Идёт загрузка корзины...</div>}>
@@ -37,6 +38,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/search" element={<Search />} />
 
           <Route path="/dashboard" element={<PrivateRoute />}>
             <Route path="user" element={<Dashboard />} />

@@ -1,15 +1,21 @@
 import axios from "axios";
+import { useSearch } from "context/search";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
-  const [keyword, setKeyword] = useState("");
-  const [results, setResults] = useState([]);
+  const [values, setValues] = useSearch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.get(`/products/search/${keyword}`);
-      console.log(data);
+      // @ts-ignore
+      const { data } = await axios.get(`/products/search/${values?.keywords}`);
+      //console.log(data);
+      // @ts-ignore
+      setValues({ ...values, results: data });
+      navigate("/search");
     } catch (err) {
       console.log(err);
     }
@@ -22,8 +28,10 @@ const Search = () => {
         type="search"
         placeholder="Search..."
         style={{ borderRadius: "0px" }}
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
+        // @ts-ignore
+        value={values?.keyword}
+        // @ts-ignore
+        onChange={(e) => setValues({ ...values, keywords: e.target.value })}
       />
       <button
         type="submit"
