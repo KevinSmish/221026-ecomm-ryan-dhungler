@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Jumbotron from "components/cards/Jumbotron";
-import { useAuth } from "context/auth";
-import AdminMenu from "components/nav/AdminMenu";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
 import moment from "moment";
+
+import { useAuth } from "context/auth";
+import Jumbotron from "components/cards/Jumbotron";
+import AdminMenu from "components/nav/AdminMenu";
+
+// @ts-ignore
+import { getPhotoUrl } from "util";
 
 const AdminProducts = () => {
   const [auth, setAuth] = useAuth();
@@ -55,9 +59,7 @@ const AdminProducts = () => {
                     <div className="row g-0">
                       <div className="col-md-4">
                         <img
-                          src={`${
-                            process.env.REACT_APP_BASE_URL
-                          }/products/photo/${p._id}?${new Date().getTime()}`}
+                          src={getPhotoUrl(p._id)}
                           alt={p.name}
                           className="img img-fluid rounded-start"
                         />
@@ -65,7 +67,9 @@ const AdminProducts = () => {
                       <div className="col-md-8">
                         <div className="card-body">
                           <h5 className="card-title">{p.name}</h5>
-                          <p className="card-text">{p.description}</p>
+                          <p className="card-text">
+                            {p.description?.substring(0, 160)}
+                          </p>
                           <p className="card-text">
                             <small className="text-muted">
                               {moment(p.createdAt).format(

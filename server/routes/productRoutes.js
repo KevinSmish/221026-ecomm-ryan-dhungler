@@ -19,6 +19,7 @@ import {
   productsCount,
   listProducts,
   productsSearch,
+  relatedProducts,
 } from "../controllers/productController.js";
 
 router.post("", requireSignin, isAdmin, formidable(), create);
@@ -27,6 +28,7 @@ router.get("/count", productsCount);
 router.get("/page/:page", listProducts);
 router.get("/photo/:productId", photo);
 router.get("/search/:keyword", productsSearch);
+router.get("/related/:productId/:categoryId", relatedProducts);
 router.get("/:slug", read);
 router.delete("/:productId", requireSignin, isAdmin, remove);
 router.put("/:productId", requireSignin, isAdmin, formidable(), update);
@@ -40,10 +42,6 @@ import {
   processPayment,
   orderStatus,
 } from "../controllers/product.js";
-
-
-
-router.get("/related-products/:productId/:categoryId", relatedProducts);
 
 router.get("/braintree/token", getToken);
 router.post("/braintree/payment", requireSignin, processPayment);

@@ -182,7 +182,7 @@ export const productsCount = async (req, res) => {
 
 export const listProducts = async (req, res) => {
   try {
-    const perPage = 3; // 6
+    const perPage = 6; 
     const page = req.params.page ? req.params.page : 1;
 
     const products = await Product.find({})
@@ -213,19 +213,6 @@ export const productsSearch = async (req, res) => {
   }
 };
 
-/*
-import braintree from "braintree";
-import sgMail from "@sendgrid/mail";
-
-sgMail.setApiKey(process.env.SENDGRID_KEY);
-
-const gateway = new braintree.BraintreeGateway({
-  environment: braintree.Environment.Sandbox,
-  merchantId: process.env.BRAINTREE_MERCHANT_ID,
-  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-});
-
 export const relatedProducts = async (req, res) => {
   try {
     const { productId, categoryId } = req.params;
@@ -242,6 +229,19 @@ export const relatedProducts = async (req, res) => {
     console.log(err);
   }
 };
+
+/*
+import braintree from "braintree";
+import sgMail from "@sendgrid/mail";
+
+sgMail.setApiKey(process.env.SENDGRID_KEY);
+
+const gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.BRAINTREE_MERCHANT_ID,
+  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 export const getToken = async (req, res) => {
   try {

@@ -1,7 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import axios from "axios";
+import moment from "moment";
+import toast from "react-hot-toast";
 import { Badge } from "antd";
 import {
   FaDollarSign,
@@ -12,10 +14,11 @@ import {
   FaWarehouse,
   FaRocket,
 } from "react-icons/fa";
-import toast from "react-hot-toast";
-import moment from "moment";
+
 import ProductCard from "components/cards/ProductCard";
-import { getPhotoUrl } from 'util';
+
+// @ts-ignore
+import { getPhotoUrl } from "util";
 
 const ProductView = () => {
   const [product, setProduct] = useState({});
@@ -26,26 +29,26 @@ const ProductView = () => {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
+    const loadRelated = async (productId, categoryId) => {
+      try {
+        const { data } = await axios.get(
+          `products/related/${productId}/${categoryId}`
+        );
+        setRelated(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     const loadProduct = async () => {
       try {
         const { data } = await axios.get(`products/${slug}`);
         setProduct(data);
-        // loadRelated(data._id, data.category._id);
+        loadRelated(data._id, data.category._id);
       } catch (error) {
         console.log(error);
       }
     };
-
-    //   const loadRelated = async (productId, categoryId) => {
-    //     try {
-    //       const { data } = await axios.get(
-    //         `/related-products/${productId}/${categoryId}`
-    //       );
-    //       setRelated(data);
-    //     } catch (err) {
-    //       console.log(err);
-    //     }
-    //   };
 
     if (slug) loadProduct();
   }, [slug]);
@@ -90,9 +93,9 @@ const ProductView = () => {
               <div>
                 <p>
                   <FaDollarSign /> Price:{" "}
-                  {price?.toLocaleString("en-US", {
+                  {price?.toLocaleString("ru-RU", {
                     style: "currency",
-                    currency: "USD",
+                    currency: "RUB",
                   })}
                 </p>
 
