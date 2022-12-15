@@ -1,12 +1,15 @@
 // @ts-nocheck
-import Search from "components/forms/Search";
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+
 import { useAuth } from "../../context/auth";
+import useCategory from "hooks/useCategory";
+import Search from "components/forms/Search";
 
 const Menu = () => {
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
+  const categories = useCategory();
 
   const logout = (e) => {
     e.preventDefault();
@@ -28,6 +31,33 @@ const Menu = () => {
             SHOP
           </NavLink>
         </li>
+
+        <div className="dropdown">
+          <li>
+            <a
+              className="nav-link pointer dropdown-toggle"
+              data-bs-toggle="dropdown"
+              href="@"
+            >
+              Categories
+            </a>
+            <ul
+              className="dropdown-menu"
+              style={{ height: "300px", overflow: "scroll" }}
+            >
+              <NavLink className="nav-link" to="/categories">
+                All Categories
+              </NavLink>
+              {categories.map((c) => (
+                <li key={c._id}>
+                  <NavLink className="nav-link" to={`/category/${c.slug}`}>
+                    {c.name}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </li>
+        </div>
 
         {/* <li className="nav-item">
           <NavLink className="nav-link" end to="/dashboard/secret">

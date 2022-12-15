@@ -21,8 +21,8 @@ router.post(
 );
 
 router.get("/list", list);
+router.get("/products/:slug", productsByCategory);
 router.get("/:slug", read);
-router.get("/products-by-category/:slug", productsByCategory);
 
 router.put(
   "/:categoryId",
