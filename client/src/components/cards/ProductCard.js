@@ -2,8 +2,13 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "antd";
 import moment from "moment";
+import { useCart } from "context/cart";
+import toast from "react-hot-toast";
 
 const ProductCard = ({ card }) => {
+  // context
+  const [cart, setCart] = useCart();
+  // hooks
   const navigate = useNavigate();
 
   return (
@@ -57,6 +62,11 @@ const ProductCard = ({ card }) => {
           style={{
             borderBottomRightRadius: "5px",
             borderTopRightRadius: "5px",
+          }}
+          onClick={() => {
+            // @ts-ignore
+            setCart([...cart, card]);
+            toast.success(`${card?.name} added to cart`);
           }}
         >
           Add to Cart

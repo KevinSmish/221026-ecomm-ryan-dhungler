@@ -1,8 +1,10 @@
 // @ts-nocheck
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { Badge } from "antd";
 
 import { useAuth } from "../../context/auth";
+import { useCart } from "../../context/cart";
 import useCategory from "hooks/useCategory";
 import Search from "components/forms/Search";
 
@@ -10,6 +12,7 @@ const Menu = () => {
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
   const categories = useCategory();
+  const [cart, setCart] = useCart();
 
   const logout = (e) => {
     e.preventDefault();
@@ -64,6 +67,14 @@ const Menu = () => {
             SECRET
           </NavLink>
         </li> */}
+
+        <li className="nav-item mt-1">
+          <Badge count={cart.length} offset={[-3, 8]} showZero={true}>
+            <NavLink className="nav-link" end to="/cart">
+              CART
+            </NavLink>
+          </Badge>
+        </li>
 
         <Search />
 

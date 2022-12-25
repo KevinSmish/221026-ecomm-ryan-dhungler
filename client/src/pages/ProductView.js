@@ -19,14 +19,14 @@ import ProductCard from "components/cards/ProductCard";
 
 // @ts-ignore
 import { getPhotoUrl } from "util";
+import { useCart } from 'context/cart';
 
 const ProductView = () => {
   const [product, setProduct] = useState({});
   const [related, setRelated] = useState([]);
   const { slug } = useParams();
 
-  // !Todo Remove
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useCart();
 
   useEffect(() => {
     const loadRelated = async (productId, categoryId) => {
@@ -129,8 +129,10 @@ const ProductView = () => {
                 borderBottomLeftRadius: "5px",
               }}
               onClick={() => {
+                // @ts-ignore
                 setCart([...cart, product]);
-                toast.success("Added to cart");
+                // @ts-ignore
+                toast.success(`${product?.name} added to cart`);
               }}
             >
               Add to Cart

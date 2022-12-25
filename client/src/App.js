@@ -23,13 +23,14 @@ function App() {
   const AdminProducts = React.lazy(() => import("./pages/admin/AdminProducts"));
 
   const Profile = React.lazy(() => import("./pages/user/Profile.js"));
-  const Cart = React.lazy(() => import("./pages/user/Cart.js"));
+  const CartForDashboard = React.lazy(() => import("./pages/user/Cart.js"));
   const Orders = React.lazy(() => import("./pages/user/Orders.js"));
   const Shop = React.lazy(() => import("./pages/Shop.js"));
   const Search = React.lazy(() => import("./pages/Search.js"));
   const ProductView = React.lazy(() => import("./pages/ProductView.js"));
   const CategoriesList = React.lazy(() => import("./pages/CategoriesList.js"));
   const CategoryView = React.lazy(() => import("./pages/CategoryView.js"));
+  const Cart = React.lazy(() => import("./pages/Cart.js"));
 
   return (
     <Suspense fallback={<div>Идёт загрузка корзины...</div>}>
@@ -44,12 +45,13 @@ function App() {
           <Route path="/categories" element={<CategoriesList />} />
           <Route path="/category/:slug" element={<CategoryView />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/cart" element={<Cart />} />
 
           <Route path="/dashboard" element={<PrivateRoute />}>
             <Route path="user" element={<Dashboard />} />
             <Route path="secret" element={<Secret />} />
             <Route path="user/profile" element={<Profile />} />
-            <Route path="user/cart" element={<Cart />} />
+            <Route path="user/cart" element={<CartForDashboard />} />
             <Route path="user/orders" element={<Orders />} />
           </Route>
           <Route path="/dashboard" element={<AdminRoute />}>
