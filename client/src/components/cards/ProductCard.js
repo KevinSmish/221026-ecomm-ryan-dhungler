@@ -4,6 +4,7 @@ import { Badge } from "antd";
 import moment from "moment";
 import { useCart } from "context/cart";
 import toast from "react-hot-toast";
+import { getLocalCurrency, getPhotoUrl } from "../../util";
 
 const ProductCard = ({ card }) => {
   // context
@@ -25,9 +26,7 @@ const ProductCard = ({ card }) => {
         >
           <img
             className="card-img-top"
-            src={`${process.env.REACT_APP_BASE_URL}/products/photo/${
-              card._id
-            }?${new Date().getTime()}`}
+            src={getPhotoUrl(card._id)}
             alt={card.name}
             style={{ height: "200px", objectFit: "contain" }}
           />
@@ -36,12 +35,7 @@ const ProductCard = ({ card }) => {
 
       <div className="card-body">
         <h5 className="text-center">{card?.name}</h5>
-        <h4 className="fw-bold">
-          {card?.price?.toLocaleString("ru-RU", {
-            style: "currency",
-            currency: "RUB",
-          })}
-        </h4>
+        <h4 className="fw-bold">{getLocalCurrency(card?.price)}</h4>
         <p className="card-text">{card?.description?.substring(0, 60)}</p>
       </div>
 
@@ -64,8 +58,10 @@ const ProductCard = ({ card }) => {
             borderTopRightRadius: "5px",
           }}
           onClick={() => {
+            const newCart = [...cart, card];
             // @ts-ignore
-            setCart([...cart, card]);
+            setCart(newCart);
+            localStorage.setItem("cart", JSON.stringify(newCart));
             toast.success(`${card?.name} added to cart`);
           }}
         >
