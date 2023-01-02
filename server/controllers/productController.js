@@ -6,6 +6,8 @@ import slugify from "slugify";
 import Product from "../models/product.js";
 import Order from "../models/order.js";
 
+import mailService from "../services/mail-service.js";
+
 dotenv.config();
 const setError = (res, error) => res.json({ error });
 
@@ -282,46 +284,25 @@ export const processPayment = async (req, res) => {
 };
 
 export const orderStatus = async (req, res) => {
-  console.log(req.body);
-};
-
-/*
-import sgMail from "@sendgrid/mail";
-
-sgMail.setApiKey(process.env.SENDGRID_KEY);
-
-export const orderStatus = async (req, res) => {
+  //console.log(req.body);
   try {
     const { orderId } = req.params;
     const { status } = req.body;
+    // console.log(orderId, status);
     const order = await Order.findByIdAndUpdate(
       orderId,
       { status },
       { new: true }
     ).populate("buyer", "email name");
-    // send email
-
-    // prepare email
-    const emailData = {
-      from: process.env.EMAIL_FROM,
-      to: order.buyer.email,
-      subject: "Order status",
-      html: `
-        <h1>Hi ${order.buyer.name}, Your order's status is: <span style="color:red;">${order.status}</span></h1>
-        <p>Visit <a href="${process.env.CLIENT_URL}/dashboard/user/orders">your dashboard</a> for more details</p>
-      `,
-    };
-
-    try {
-      await sgMail.send(emailData);
-    } catch (err) {
-      console.log(err);
-    }
-
     res.json(order);
+
+    // send email
+    await mailService.sendOrderMail(
+      order.buyer.email,
+      order.buyer.name,
+      order.status
+    );
   } catch (err) {
     console.log(err);
   }
 };
-
-*/

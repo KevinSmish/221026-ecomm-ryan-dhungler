@@ -21,6 +21,7 @@ function App() {
     import("./pages/admin/AdminProductUpdate")
   );
   const AdminProducts = React.lazy(() => import("./pages/admin/AdminProducts"));
+  const AdminOrders = React.lazy(() => import("./pages/admin/AdminOrders"));
 
   const Profile = React.lazy(() => import("./pages/user/Profile.js"));
   const CartForDashboard = React.lazy(() => import("./pages/user/Cart.js"));
@@ -58,6 +59,7 @@ function App() {
             <Route path="admin" element={<AdminDashboard />} />
             <Route path="admin/category" element={<AdminCategory />} />
             <Route path="admin/product" element={<AdminProduct />} />
+            <Route path="admin/orders" element={<AdminOrders />} />
             <Route
               path="admin/products/update/:slug"
               element={<AdminProductUpdate />}
