@@ -2,6 +2,8 @@ import { validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 
 import User from "../models/user.js";
+import Order from "../models/order.js";
+
 import { hashPassword, comparePassword } from "../helpers/authHelper.js";
 
 export const users = async (req, res, next) => {

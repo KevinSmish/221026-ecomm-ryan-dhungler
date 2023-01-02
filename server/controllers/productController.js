@@ -240,6 +240,25 @@ export const getToken = async (req, res) => {
 };
 
 export const processPayment = async (req, res) => {
+  const decrementQuantity = async (cart) => {
+    try {
+      // build mongodb query
+      const bulkOps = cart.map((item) => {
+        return {
+          updateOne: {
+            filter: { _id: item._id },
+            update: { $inc: { quantity: -0, sold: +1 } },
+          },
+        };
+      });
+
+      const updated = await Product.bulkWrite(bulkOps, {});
+      // console.log("blk updated", updated);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   try {
     const { nonce, cart } = req.body;
     const amount = cart.reduce((sum, current) => sum + current.price, 0);
@@ -257,25 +276,6 @@ export const processPayment = async (req, res) => {
     decrementQuantity(cart);
 
     res.json({ ok: true, amount });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const decrementQuantity = async (cart) => {
-  try {
-    // build mongodb query
-    const bulkOps = cart.map((item) => {
-      return {
-        updateOne: {
-          filter: { _id: item._id },
-          update: { $inc: { quantity: -0, sold: +1 } },
-        },
-      };
-    });
-
-    const updated = await Product.bulkWrite(bulkOps, {});
-    // console.log("blk updated", updated);
   } catch (err) {
     console.log(err);
   }
