@@ -4,7 +4,7 @@ import slugify from "slugify";
 // import { validationResult } from "express-validator";
 
 import Product from "../models/product.js";
-// import Order from "../models/order.js";
+import Order from "../models/order.js";
 
 dotenv.config();
 const setError = (res, error) => res.json({ error });
@@ -182,7 +182,7 @@ export const productsCount = async (req, res) => {
 
 export const listProducts = async (req, res) => {
   try {
-    const perPage = 6; 
+    const perPage = 6;
     const page = req.params.page ? req.params.page : 1;
 
     const products = await Product.find({})
@@ -230,28 +230,10 @@ export const relatedProducts = async (req, res) => {
   }
 };
 
-/*
-import braintree from "braintree";
-import sgMail from "@sendgrid/mail";
-
-sgMail.setApiKey(process.env.SENDGRID_KEY);
-
-const gateway = new braintree.BraintreeGateway({
-  environment: braintree.Environment.Sandbox,
-  merchantId: process.env.BRAINTREE_MERCHANT_ID,
-  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-});
-
 export const getToken = async (req, res) => {
   try {
-    gateway.clientToken.generate({}, function (err, response) {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.send(response);
-      }
-    });
+    const paymentToken = Math.round(Math.random() * 1000);
+    res.send({ paymentToken });
   } catch (err) {
     console.log(err);
   }
@@ -259,51 +241,22 @@ export const getToken = async (req, res) => {
 
 export const processPayment = async (req, res) => {
   try {
-    // console.log(req.body);
     const { nonce, cart } = req.body;
+    const amount = cart.reduce((sum, current) => sum + current.price, 0);
+    console.log("amount => ", amount);
 
-    let total = 0;
-    cart.map((i) => {
-      total += i.price;
-    });
-    // console.log("total => ", total);
+    //create order
+    const order = new Order({
+      products: cart,
+      payment: true,
+      amount,
+      buyer: req.user._id,
+    }).save();
 
-    let newTransaction = gateway.transaction.sale(
-      {
-        amount: total,
-        paymentMethodNonce: nonce,
-        options: {
-          submitForSettlement: true,
-        },
-      },
-      function (error, result) {
-        if (result) {
-          // res.send(result);
-          // create order
-          const order = new Order({
-            products: cart,
-            payment: result,
-            buyer: req.user._id,
-          }).save();
-          // decrement quantity
-          decrementQuantity(cart);
-          // const bulkOps = cart.map((item) => {
-          //   return {
-          //     updateOne: {
-          //       filter: { _id: item._id },
-          //       update: { $inc: { quantity: -0, sold: +1 } },
-          //     },
-          //   };
-          // });
+    // decrement quantity
+    decrementQuantity(cart);
 
-          // Product.bulkWrite(bulkOps, {});
-
-          res.json({ ok: true });
-        } else {
-          res.status(500).send(error);
-        }
-      }
-    );
+    res.json({ ok: true, amount });
   } catch (err) {
     console.log(err);
   }
@@ -322,11 +275,20 @@ const decrementQuantity = async (cart) => {
     });
 
     const updated = await Product.bulkWrite(bulkOps, {});
-    console.log("blk updated", updated);
+    // console.log("blk updated", updated);
   } catch (err) {
     console.log(err);
   }
 };
+
+export const orderStatus = async (req, res) => {
+  console.log(req.body);
+};
+
+/*
+import sgMail from "@sendgrid/mail";
+
+sgMail.setApiKey(process.env.SENDGRID_KEY);
 
 export const orderStatus = async (req, res) => {
   try {
